@@ -31,16 +31,18 @@ class _FormViewState extends State<FormView> {
       body: Form(
           key: globalKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                  color: Colors.amber,
-                  height: MediaQuery.of(context).size.height,
-                  child: ListView.builder(
-                    
-                      itemCount: counter,
-                      itemBuilder: (context, index) {
-                        return _row(index);
-                      }))
+              Expanded(
+                child: SizedBox(
+                    // color: Colors.amber,
+                    height: MediaQuery.of(context).size.height,
+                    child: ListView.builder(
+                        itemCount: counter,
+                        itemBuilder: (context, index) {
+                          return _row(index);
+                        })),
+              )
             ],
           )),
     );
