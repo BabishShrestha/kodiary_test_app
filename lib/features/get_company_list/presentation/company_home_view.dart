@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,19 +31,40 @@ class _CompanyHomeViewState extends ConsumerState<CompanyHomeView> {
         body: ref.watch(getCompanyListControllerProvider).maybeWhen(
             loading: () => const Center(child: CircularProgressIndicator()),
             data: (data) => Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 2,
-                      child: ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            final Company company = data[index];
-                            return Text(company.name);
-                          }),
+                    Text(
+                      'Company List',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final Company company = data[index];
+                          return Center(
+                              child:
+                                  Text('${company.name} => ${company.domain}'));
+                        }),
+                    Text(
+                      'Login to Company Domain',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            //add underline
+                            decoration: TextDecoration.underline,
+
+                            // decorationStyle: TextDecorationStyle.dashed,
+                          ),
                     ),
                     const Text('Enter company listing by user name'),
-                    Expanded(
+                    Flexible(
+                      flex: 2,
                       child: TextField(
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(8),
+                          border: OutlineInputBorder(),
+                          labelText: 'User Name',
+                        ),
                         onChanged: (val) {
                           nameTextController.text = val;
                         },
