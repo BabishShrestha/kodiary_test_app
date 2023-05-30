@@ -43,33 +43,31 @@ class _CompanyDomainLoginViewState
   Widget build(BuildContext context) {
     log(appBarColorNotifier.value.toString());
     return ValueListenableBuilder<Color>(
-        valueListenable: appBarColorNotifier,
-        builder: (context, value, child) {
-          return Scaffold(
-            appBar: AppBar(backgroundColor: value),
-            body: ref.watch(postLoginWithDomainControllerProvider).maybeWhen(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                data: (data) {
-                  final ThemeResponse theme = data;
+      valueListenable: appBarColorNotifier,
+      builder: (context, value, child) {
+        return Scaffold(appBar: AppBar(backgroundColor: value), body: child);
+      },
+      child: ref.watch(postLoginWithDomainControllerProvider).maybeWhen(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          data: (data) {
+            final ThemeResponse theme = data;
 
-                  appBarColorNotifier.value = Color(
-                    int.parse(
-                        theme.theme.palettes[0].value.replaceAll('#', '0xFF')),
-                  );
+            appBarColorNotifier.value = Color(
+              int.parse(theme.theme.palettes[0].value.replaceAll('#', '0xFF')),
+            );
 
-                  // log(defaultColor.toString());
-                  return Column(
-                    children: [
-                      const Text("Login Successful"),
-                      Text(theme.theme.primaryTextColor),
-                    ],
-                  );
-                },
-                error: (error, stackTrace) => Text(
-                      error.toString(),
-                    ),
-                orElse: () => const Text('No data')),
-          );
-        });
+            // log(defaultColor.toString());
+            return Column(
+              children: [
+                const Text("Login Successful"),
+                Text(theme.theme.primaryTextColor),
+              ],
+            );
+          },
+          error: (error, stackTrace) => Text(
+                error.toString(),
+              ),
+          orElse: () => const Text('No data')),
+    );
   }
 }
