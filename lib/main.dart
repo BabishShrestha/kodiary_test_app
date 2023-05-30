@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kodiary_test_app/features/form/presentation/form_view.dart';
 import 'package:kodiary_test_app/features/get_company_list/presentation/company_home_view.dart';
 import 'package:kodiary_test_app/features/google_maps/maps.dart';

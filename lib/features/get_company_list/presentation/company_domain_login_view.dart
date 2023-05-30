@@ -60,7 +60,7 @@ class _CompanyDomainLoginViewState
                   // log(defaultColor.toString());
                   return Column(
                     children: [
-                      Text("Login Successful"),
+                      const Text("Login Successful"),
                       Text(theme.theme.primaryTextColor),
                     ],
                   );

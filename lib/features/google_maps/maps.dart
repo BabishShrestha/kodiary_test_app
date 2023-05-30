@@ -18,7 +18,6 @@ class MapsViewState extends State<MapsView> {
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
-    
   );
 
   static const CameraPosition _kLake = CameraPosition(
@@ -27,24 +26,88 @@ class MapsViewState extends State<MapsView> {
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
 
+// Markers
+  final Set<Marker> _markers = {};
+  final Set<Polygon> _polygons = HashSet<Polygon>();
+  final Set<Polyline> _polyLines = {};
+  List<LatLng> polygonLatLngs = [];
 
-// Maps
+  void onTapAddMarker(LatLng latLng) async {
+    // var uuid = const Uuid();
+    setState(() {
+      _markers.add(
+        Marker(
+            markerId: MarkerId(latLng.toString()),
+            position: latLng,
+            infoWindow: InfoWindow(
+              title: (polygonLatLngs.length + 1).toString(),
+              snippet: "So this is snippet",
+            ),
+            icon: BitmapDescriptor.defaultMarker,
+            // on tap to remove marker
+            onTap: () {
+              setState(() {
+                _markers.removeWhere(
+                    (element) => element.markerId.value == latLng.toString());
+                // _polygons.removeWhere(
+                //     (element) => element.polygonId.value == latLng.toString());
+              });
+            }),
+      );
+      polygonLatLngs.add(latLng);
+      updatePolygons(latLng);
+    });
+    // _polygons.add(Polygon(polygonId: polygonId));
+  }
 
-//  Set< Polygon> _polygons=HashSet<Polygon>();
-//  List<LatLng> polygonLatLngs=List<LatLng>();
-// void createPolygon(){
-//   final String polygonIDVal=;
-//   _polygons.add(Polygon(polygonId: polygonId));
-  
-// }
+  void updatePolygons(LatLng latLng) {
+    _polyLines.add(
+      Polyline(
+        polylineId: PolylineId(latLng.toString()),
+        points: polygonLatLngs,
+        color: Colors.pink,
+      ),
+    );
+    _polygons.add(
+      Polygon(
+        polygonId: PolygonId(latLng.toString()),
+        points: polygonLatLngs,
+        fillColor: Colors.yellow.withOpacity(0.5),
+        strokeColor: Colors.pink,
+        strokeWidth: 2,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _markers.clear();
+                _polygons.clear();
+                _polyLines.clear();
+                polygonLatLngs.clear();
+              });
+            },
+            child: const Text(
+              "Clear",
+            ),
+          )
+        ],
+      ),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
-        // polygons: _polygons,
+        markers: _markers,
+        polygons: _polygons,
+        polylines: _polyLines,
+        onTap: (latlng) {
+          onTapAddMarker(latlng);
+        },
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
